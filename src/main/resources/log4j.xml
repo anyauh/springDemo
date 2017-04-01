@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration>
+
+	<!--每天日志： 输出日志到文件,文件超过最大值，生成新文件， 每天一个文件，以日期后缀追加到文件名后 -->
+	<appender name="EVERYDAYFILE" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="ImmediateFlush" value="true"></param>
+		<param name="File" value="D://szztLog//app_everydayfile.log"></param>
+		<param name="MaxFileSize" value="30MB"></param>
+		<param name="MaxBackupIndex" value="100"></param>
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'"></param>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="[%d{yyyy-MM-dd HH:mm:ss\}][PAF][%t][%p][%c:%L]-%m%n"></param>
+		</layout>
+	</appender>
+
+	<!-- 完整日志：输出日志到文件 文件大小到达指定大小值的时候，产生一个新的文件 -->
+	<appender name="COMPLETEFILE" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="D://szztLog//PAF_completefile.log"></param>
+		<param name="ImmediateFlush" value="true" />
+		<param name="Append" value="true"></param>
+		<param name="MaxFileSize" value="30MB"></param>
+		<param name="MaxBackupIndex" value="100"></param>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="[%d{yyyy-MM-dd HH:mm:ss\}][PAF][%t][%p][%c:%L]-%m%n"></param>
+		</layout>
+	</appender>
+
+	<!--临时日志：log日志输出文件打印 ，临时输出日志文件， 每次重启服务后，原日志会被覆盖掉，只记录此次启动的所有日志 -->
+	<appender name="FILE" class="org.apache.log4j.FileAppender">
+		<param name="File" value="${catalina.base}/logs/PAF_temporarily.log" />
+		<!-- 日志不追加，重启服务后被覆盖 -->
+		<param name="Append" value="false"></param>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="[%d{yyyy-MM-dd HH:mm:ss\}][PAF][%t][%p][%c:%L]-%m%n"></param>
+		</layout>
+	</appender>
+
+	<!-- 控制台输出日志 -->
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="[%d{yyyy-MM-dd HH:mm:ss\}][PAF][%t][%p][%c:%L]-%m%n"></param>
+		</layout>
+	</appender>
+
+	<logger name="druid.sql.Connection">
+		<level value="info" />
+	</logger>
+	<logger name="druid.sql.ResultSet">
+		<level value="info" />
+	</logger>
+	<!-- 打印SQL语句 -->
+	<logger name="druid.sql.Statement">
+		<level value="INFO" />
+	</logger>
+
+
+	<root>
+		<priority value="INFO" />
+		<!-- 输出日志文件，注释掉则不输出对应的日志文件 -->
+		<appender-ref ref="FILE" />
+		<!-- 每天日志文件输出，注释掉则不再每天出现带有日期后缀的日志对应文件 -->
+		<appender-ref ref="EVERYDAYFILE" />
+		<!-- 输出指定大小的日志文件，达到该大小后生成新文件， 注释掉则不再按规则生成新文件 。 此日志输出可以被注释掉，被EVERYDAYFILE包含 -->
+		<!-- <appender-ref ref="COMPLETEFILE" /> -->
+		<!-- 输出日志日志到控制台，注释掉则不再输出日志到控制台 -->
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+
+</log4j:configuration>
