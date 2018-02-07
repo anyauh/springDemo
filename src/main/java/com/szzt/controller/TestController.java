@@ -15,6 +15,8 @@ public class TestController {
     @ResponseBody
     @RequestMapping("test")
     public String test(){
+
+
         System.out.println("fjeifjeifjeifjei");
         return "test";
     }
